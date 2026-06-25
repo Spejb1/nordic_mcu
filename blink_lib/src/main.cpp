@@ -1,6 +1,6 @@
 #include <zephyr/kernel.h>
 #include <stdio.h>
-#include "blink_lib.hpp"
+#include "..\lib\blink_lib.hpp"
 
 static blink_status led_status(7);
 
@@ -14,6 +14,6 @@ int main(void)
 
     while (true){
         k_msleep(2000);
-        led_status.add_colour(Colour::GREEN);
+        led_status.add_colour(blink_status::Colour::GREEN);
     }
 }
