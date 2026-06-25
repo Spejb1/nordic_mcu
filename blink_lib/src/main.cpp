@@ -1,15 +1,19 @@
 #include <zephyr/kernel.h>
-#include<stdio.h>
+#include <stdio.h>
+#include "blink_lib.hpp"
 
-uint8_t constexpr dqueue_size = 7;
+static blink_status led_status(7);
 
 int main(void)
 {
-    blink_led_status blink_status(dqueue_size);
-    blink_led_status.begin();
+    if (!led_status.begin()) {
+        printf("LED init failed\n");
+        return 0;
+    }
 
 
     while (true){
-
+        k_msleep(2000);
+        led_status.add_colour(Colour::GREEN);
     }
 }
