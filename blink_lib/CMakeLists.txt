@@ -6,4 +6,5 @@ project(blink_lib)
 target_sources(app PRIVATE 
 	src/main.cpp
 	lib/blink_lib.cpp
+	lib/blink_zephyr_objects.c
 )

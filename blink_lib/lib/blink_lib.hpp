@@ -1,13 +1,18 @@
 #pragma once
 #include <stdbool.h>
-#include <deque> // to do next -> deque is not part of minimal c++ which is used by zephyr -> swap for array
+#include <stddef.h>
+//#include <deque> // to do next -> deque is not part of minimal c++ which is used by zephyr -> swap for array
 #include <stdint.h>
 
 class blink_status
 {
 public:
-  blink_status(size_t maxSize) : _maxSize(maxSize) {}
-  ~blink_status();
+  blink_status(size_t maxSize) : _maxSize(maxSize), _head(0), _tail(0), _count(0) {
+    _buf = new Colour[maxSize];
+  }
+  ~blink_status() {
+    delete[] _buf;
+  }
 
   enum class Colour
   {
@@ -27,6 +32,17 @@ public:
   void process();
 
   private:
-  std::deque<enum Colour> dq;
-  size_t _maxSize;
+    Colour  *_buf;
+    size_t   _maxSize;
+    size_t   _head;
+    size_t   _tail;
+    size_t   _count;
+
+    size_t size()  const;
+    bool   empty() const;
+    bool   full()  const;
+    Colour front() const;
+    void   push_back(Colour c);
+    void   push_front(Colour c);
+    void   pop_front();
 };
