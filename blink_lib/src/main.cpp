@@ -14,6 +14,6 @@ int main(void)
 
     while (true){
         k_msleep(2000);
-        led_status.add_colour(blink_status::Colour::GREEN);
+        led_status.add_colour(blink_status::Colour::GREEN); // program working LED
     }
 }

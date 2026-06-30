@@ -2,8 +2,8 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 
-#define BLINK_DURATION_MS 100
-#define BLINK_GAP_MS 50
+#define BLINK_DURATION_MS 150 // to be tuned
+#define BLINK_GAP_MS 100 // to be tuned
 
 static const struct gpio_dt_spec led_r = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 static const struct gpio_dt_spec led_g = GPIO_DT_SPEC_GET(DT_ALIAS(led1), gpios);
@@ -16,16 +16,7 @@ extern struct k_thread blink_thread_data;
 extern k_thread_stack_t blink_stack[];
 
 static void blink_thread_fn(void *arg1, void *arg2, void *arg3);
-/*
-K_THREAD_DEFINE(blink_tid,          // thread object name
-                512,                // stack size in bytes
-                blink_thread_fn,    // entry function
-                NULL, NULL, NULL,   // arguments
-                10,                 // priority 1 == HIGH
-                0,                  // options
-                K_NO_WAIT           // start delay
-);
-*/
+
 static blink_status *s_instance = nullptr;
 
 static void set_colour(blink_status::Colour c)
@@ -66,16 +57,7 @@ static void blink_thread_fn(void *, void *, void *) // main thread fnc, never re
         s_instance->process();
     }
 }
-/*
-blink_status::blink_status(size_t maxSize) 
-    : _maxSize(maxSize), _head(0), _tail(0), _count(0) {
-    _buf = new Colour[maxSize];
 
-}
-blink_status::~blink_status() {
-    delete[] _buf;
-}
-*/
 bool blink_status::begin()
 {
     // Check all three GPIO devices are ready

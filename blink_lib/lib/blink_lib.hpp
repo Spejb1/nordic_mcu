@@ -1,7 +1,6 @@
 #pragma once
 #include <stdbool.h>
 #include <stddef.h>
-//#include <deque> // to do next -> deque is not part of minimal c++ which is used by zephyr -> swap for array
 #include <stdint.h>
 
 class blink_status
