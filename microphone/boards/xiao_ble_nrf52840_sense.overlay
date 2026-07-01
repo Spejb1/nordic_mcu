@@ -1,0 +1,9 @@
+/ {
+	msm261d3526h1cpm-c-en {
+		regulator-boot-on;
+	};
+};
+
+dmic_dev: &pdm0 {
+	status = "okay";
+};

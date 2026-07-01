@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.20.0)
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+
+project(microphone)
+
+target_sources(app PRIVATE 
+	src/main.cpp
+	lib/blink_lib.cpp
+	lib/blink_zephyr_objects.c
+)
+
