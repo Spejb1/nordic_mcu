@@ -97,49 +97,52 @@ int main(void)
 		return 0;
 	}
 
-	/* wait for host to actually open the port */
-	uint32_t dtr = 0;
-	while (!dtr) {
-		uart_line_ctrl_get(uart_dev, UART_LINE_CTRL_DTR, &dtr);
-		k_msleep(50);
-	}
+	if (!led_status.begin()) {
+        printf("LED init failed\n");
+        return 0;
+    }
 
 	uart_irq_callback_set(uart_dev, uart_cb);
 	uart_irq_rx_enable(uart_dev);
 
-        if (!led_status.begin()) {
-                printf("LED init failed\n");
-                return 0;
-        }
+	/* wait for host to actually open the port */
+	uint32_t dtr = 0;
+	while (!dtr) {
+		uart_line_ctrl_get(uart_dev, UART_LINE_CTRL_DTR, &dtr);
+		led_status.add_colour(blink_status::Colour::GREEN); // program working LED
+		k_msleep(50);
+	}
 
 
         while (true){
         
             if (cmd_pending) {
 				cmd_pending = false;
-			if (cmd_byte == 'R' && !recording) {
-                led_status.add_colour(blink_status::Colour::BLUE);
-				recording = (dmic_start() == 0);
-			} else if (cmd_byte == 'S' && recording) {
-                led_status.add_colour(blink_status::Colour::RED);
-				dmic_trigger(dmic_dev, DMIC_TRIGGER_STOP);
-				recording = false;
+				if (cmd_byte == 'R' && !recording) {
+                	led_status.add_colour(blink_status::Colour::BLUE);
+					uint8_t ack = 0xAA;
+    				uart_send(&ack, 1);
+					recording = (dmic_start() == 0);
+				} else if (cmd_byte == 'S' && recording) {
+                	led_status.add_colour(blink_status::Colour::RED);
+					dmic_trigger(dmic_dev, DMIC_TRIGGER_STOP);
+					recording = false;
+				}
 			}
-		}
 
-		if (recording) {
-			void *buffer;
-			uint32_t size;
+			if (recording) {
+				void *buffer;
+				uint32_t size;
 
-			if (dmic_read(dmic_dev, 0, &buffer, &size, 2000) == 0) {
-				uart_send((uint8_t *)buffer, size);
-				k_mem_slab_free(&mem_slab, buffer);
+				if (dmic_read(dmic_dev, 0, &buffer, &size, 2000) == 0) {
+					uart_send((uint8_t *)buffer, size);
+					k_mem_slab_free(&mem_slab, buffer);
+				}
+			} else {
+				k_msleep(10);
 			}
-		} else {
-			k_msleep(10);
-		}
             //k_msleep(2000);
-            led_status.add_colour(blink_status::Colour::GREEN); // program working LED
+            //led_status.add_colour(blink_status::Colour::GREEN); // program working LED
         }
 	return 0;
 }
