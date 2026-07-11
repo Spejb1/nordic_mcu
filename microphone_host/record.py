@@ -31,6 +31,8 @@ def main():
     ser = serial.Serial(port_name, baudrate=115200, timeout=0.5) # Open the serial/USB-CDC port and after 0.5 read.
     time.sleep(0.3) # let the firmware notice DTR and finish init
     ser.reset_input_buffer() # discard anything stale before we start
+    ser.write(bytes([ord('G'), 0x20]))
+    print(ser.read(64))
 
     wav_file = wave.open(out_path, "wb") # open in "wb" (write binary) mode gives us an object where we just call setparams()
     wav_file.setnchannels(CHANNELS)

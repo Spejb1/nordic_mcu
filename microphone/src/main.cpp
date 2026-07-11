@@ -109,9 +109,21 @@ static int dmic_start(void)
 	// nrf_pdm_gain_set(NRF_PDM0, NRF_PDM_GAIN_MAXIMUM, NRF_PDM_GAIN_MAXIMUM); // hardcode to be tuned
 	// nrf_pdm_gain_set(NRF_PDM0, pdm_gain, pdm_gain);
 	ret = dmic_trigger(dmic_dev, DMIC_TRIGGER_START);
+	if (ret) {
+		return ret;
+	}
 	k_msleep(5);
 	nrf_pdm_gain_set(NRF_PDM0, pdm_gain, pdm_gain);
-	return ret;
+
+	void *buffer;
+	uint32_t size;
+	for (int i = 0; i < 10; i++) {
+		if (dmic_read(dmic_dev, 0, &buffer, &size, 2000) == 0) {
+			k_mem_slab_free(&mem_slab, buffer);
+		}
+	}
+
+	return 0; // ret
 }
 
 static void dmic_debug_measure(void) // AI test fnc for single min max values from microphone
