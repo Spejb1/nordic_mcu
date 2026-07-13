@@ -14,7 +14,7 @@
 #define BYTES_PER_SAMPLE 2
 #define BLOCK_MS         100
 #define BLOCK_SIZE       (SAMPLE_RATE * BYTES_PER_SAMPLE * BLOCK_MS / 1000) /* 3200 B */
-#define NUM_BLOCKS       4
+#define NUM_BLOCKS       8 // 4 16
 
 K_MEM_SLAB_DEFINE(mem_slab, BLOCK_SIZE, NUM_BLOCKS, 4);
 K_SEM_DEFINE(tx_done_sem, 0, 1);
@@ -96,7 +96,7 @@ static int dmic_start(void)
 		},
 		.streams = &stream,
 		.channel = {
-			.req_chan_map_lo = dmic_build_channel_map(0, 0, PDM_CHAN_LEFT), // PDM_CHAN_RIGHT
+			//.req_chan_map_lo = dmic_build_channel_map(0, 0, PDM_CHAN_LEFT), // PDM_CHAN_RIGHT
 			.req_num_chan = 1,
 			.req_num_streams = 1,
 		},
@@ -143,7 +143,7 @@ static void dmic_debug_measure(void) // AI test fnc for single min max values fr
 		},
 		.streams = &stream,
 		.channel = {
-			.req_chan_map_lo = dmic_build_channel_map(0, 0, PDM_CHAN_LEFT),
+			//.req_chan_map_lo = dmic_build_channel_map(0, 0, PDM_CHAN_LEFT),
 			.req_num_chan = 1,
 			.req_num_streams = 1,
 		},
