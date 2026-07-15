@@ -1,10 +1,10 @@
 """
 record.py — record raw PCM audio streamed over serial from the nRF52840
-and save it as a proper .wav file.
+and save it as a proper .wav file
 
 Usage:
-    python record.py COM5 out.wav            # record until Ctrl+C
-    python record.py COM5 out.wav 5          # record for 5 seconds then auto-stop
+    python record.py COMXX out.wav            # record until Ctrl+C
+    python record.py COMXX out.wav 5          # record for 5 seconds then auto-stop
 """
 
 import sys
@@ -13,7 +13,7 @@ import wave
 import serial
 
 # --- Audio format must match what the firmware sends ---
-SAMPLE_RATE = 16000
+SAMPLE_RATE = 16000 # 90000
 SAMPLE_WIDTH_BYTES = 2   # 16-bit samples = 2 bytes each
 CHANNELS = 1
 CHUNK_SIZE = 4096
