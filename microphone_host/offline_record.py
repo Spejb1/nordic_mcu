@@ -4,7 +4,7 @@ offline_test.py — record raw PCM audio (5 s) after MCU dupm of pre-recorded ad
 tested on xiao nRF52840 sense. after save it as s .wav file
 
 Usage:
-    python offline_test.py COMXX outX.wav
+    python offline_record.py COMXX outX.wav
 """
 
 import sys
@@ -19,7 +19,7 @@ OFFLINE_SECONDS = 4
 OFFLINE_SAMPLES = SAMPLE_RATE * OFFLINE_SECONDS
 OFFLINE_BYTES = OFFLINE_SAMPLES * SAMPLE_WIDTH_BYTES  # 96000
 
-TRIM_SECONDS = 0.5
+TRIM_SECONDS = 0.8 # old 0.5
 TRIM_BYTES = int(SAMPLE_RATE * TRIM_SECONDS) * SAMPLE_WIDTH_BYTES
 
 def main():
